@@ -12,8 +12,8 @@ jobs:
   steps:
 
   # Step 1: Check out the code from Github
-  - name: Checkout repository
-    uses: actions/chekout@v3
+  - name: Checkout
+    uses: actions/checkout@v3
 
   # Step 2: Setup AWS credentials (For AWS access and ECR access)
   - name: Setup AWS credentials
