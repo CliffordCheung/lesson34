@@ -9,36 +9,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-  steps:
+    steps:
 
   # Step 1: Check out the code from Github
-  - name: Checkout
-    uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
   # Step 2: Setup AWS credentials (For AWS access and ECR access)
-  - name: Setup AWS credentials
-    uses: aws-actions/configure-aws-credentials@v4
-    with:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      aws-region: us-east-1 
+    - name: Setup AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 
 
   # Step 3: Log in to Amazon ECR
-  - name: Login to Amazon ECR
-    run: | 
-      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 255945442255.dkr.ecr.us-east-1.amazonaws.com
+    - name: Login to Amazon ECR
+      run: | 
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 255945442255.dkr.ecr.us-east-1.amazonaws.com
 
   # Step 4: Build Docker Image
-  - name: Build Docker image
-    run: |
-      docker build -t clifford-flask-private-repository .
+    - name: Build Docker image
+      run: |
+        docker build -t clifford-flask-private-repository .
 
   # Step 5: Tag
-  - name: Tag Docker image
-    run: |
-      docker tag clifford-flask-private-repository:latest 255945442255.dkr.ecr.us-east-1.amazonaws.com/clifford-flask-private-repository:${{ github.sha }}
+    - name: Tag Docker image
+      run: |
+        docker tag clifford-flask-private-repository:latest 255945442255.dkr.ecr.us-east-1.amazonaws.com/clifford-flask-private-repository:${{ github.sha }}
       
   # Step 5: Push Docker Image to ECR
-  - name: Push Docker image to Amazon ECR
-    run: |
-      docker push 255945442255.dkr.ecr.us-east-1.amazonaws.com/clifford-flask-private-repository:${{ github.sha }}
+    - name: Push Docker image to Amazon ECR
+      run: |
+        docker push 255945442255.dkr.ecr.us-east-1.amazonaws.com/clifford-flask-private-repository:${{ github.sha }}
